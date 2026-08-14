@@ -31,11 +31,14 @@ func New(message string) error {
 }
 
 // NewI18nError 按错误码解析当前请求语言的国际化消息；
-// 翻译缺失时回退为错误码本身，保证 Code 始终可读
+// 解析优先级：服务 locales（可覆盖内置文案）> 包内置通用文案 > 错误码本身，保证 Code 始终可读
 func NewI18nError(ctx context.Context, errorCode string) *Error {
 	message := middleware.GetMsgByKey(ctx, errorCode)
 
 	if message == "" || message == errorCode {
+		message = builtinMessage(middleware.GetLanguage(ctx), errorCode)
+	}
+	if message == "" {
 		message = errorCode
 	}
 
@@ -50,6 +53,9 @@ func NewI18nErrorWithTemplate(ctx context.Context, errorCode string, templateDat
 	message := middleware.GetMsgWithMap(ctx, errorCode, templateData)
 
 	if message == "" || message == errorCode {
+		message = builtinMessage(middleware.GetLanguage(ctx), errorCode)
+	}
+	if message == "" {
 		message = errorCode
 	}
 
@@ -65,8 +71,15 @@ func NewBizAppError(ctx context.Context, bizerrCode string) *gwerrors.AppError {
 }
 
 // NewBizAppErrorWithTemplate 使用模板数据将业务错误码转换为网关 AppError
+// 网关 locales 未命中文案时回退包内置通用文案，避免空 details
 func NewBizAppErrorWithTemplate(ctx context.Context, bizerrCode string, templateData map[string]any) *gwerrors.AppError {
-	return middleware.NewLocalizedAppErrorWithMap(ctx, MapBizCodeToGatewayErrorCode(bizerrCode), bizerrCode, templateData)
+	appErr := middleware.NewLocalizedAppErrorWithMap(ctx, MapBizCodeToGatewayErrorCode(bizerrCode), bizerrCode, templateData)
+	if appErr != nil && appErr.GetDetails() == "" {
+		if msg := builtinMessage(middleware.GetLanguage(ctx), bizerrCode); msg != "" {
+			appErr.WithDetails(msg)
+		}
+	}
+	return appErr
 }
 
 // NewBizAppErrorWithCause 将业务错误码转换为网关 AppError，并把底层 error 文案
