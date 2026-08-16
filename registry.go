@@ -15,14 +15,13 @@ import (
 	"strings"
 	"sync"
 
-	gwerrors "github.com/kamalyes/go-rpc-gateway/errors"
 	"google.golang.org/grpc/codes"
 )
 
-// CodeMapping 业务错误码映射（gRPC 状态码 + 网关 AppError 错误码）
+// CodeMapping 业务错误码映射（gRPC 状态码 + 网关错误码）
 type CodeMapping struct {
 	GRPC    codes.Code
-	Gateway gwerrors.ErrorCode
+	Gateway GatewayCode
 }
 
 var (
@@ -33,20 +32,20 @@ var (
 func init() {
 	// 通用错误码默认映射（与各服务原有 switch 分支保持一致）
 	RegisterMany(map[string]CodeMapping{
-		BizErrCodeInternalError:           {codes.Internal, gwerrors.ErrCodeInternalServerError},
-		BizErrCodeInvalidArgument:         {codes.InvalidArgument, gwerrors.ErrCodeBadRequest},
-		BizErrCodeValidationFailed:        {codes.InvalidArgument, gwerrors.ErrCodeBadRequest},
-		BizErrCodeInvalidParameter:        {codes.InvalidArgument, gwerrors.ErrCodeBadRequest},
-		BizErrCodeUnauthenticated:         {codes.Unauthenticated, gwerrors.ErrCodeUnauthorized},
-		BizErrCodePermissionDenied:        {codes.PermissionDenied, gwerrors.ErrCodeForbidden},
-		BizErrCodeNotFound:                {codes.NotFound, gwerrors.ErrCodeNotFound},
-		BizErrCodeConflict:                {codes.AlreadyExists, gwerrors.ErrCodeConflict},
-		BizErrCodeCannotBeSelf:            {codes.FailedPrecondition, gwerrors.ErrCodeBadRequest},
-		BizErrCodeUnsupportedOperation:    {codes.Unimplemented, gwerrors.ErrCodeInternalServerError},
-		BizErrCodeDatabaseError:           {codes.Internal, gwerrors.ErrCodeInternalServerError},
-		BizErrCodeDatabaseOperationFailed: {codes.Internal, gwerrors.ErrCodeInternalServerError},
-		BizErrCodeConversionFailed:        {codes.Internal, gwerrors.ErrCodeInternalServerError},
-		BizErrCodeExternalServiceError:    {codes.Internal, gwerrors.ErrCodeInternalServerError},
+		BizErrCodeInternalError:           {codes.Internal, GatewayCodeInternalServerError},
+		BizErrCodeInvalidArgument:         {codes.InvalidArgument, GatewayCodeBadRequest},
+		BizErrCodeValidationFailed:        {codes.InvalidArgument, GatewayCodeBadRequest},
+		BizErrCodeInvalidParameter:        {codes.InvalidArgument, GatewayCodeBadRequest},
+		BizErrCodeUnauthenticated:         {codes.Unauthenticated, GatewayCodeUnauthorized},
+		BizErrCodePermissionDenied:        {codes.PermissionDenied, GatewayCodeForbidden},
+		BizErrCodeNotFound:                {codes.NotFound, GatewayCodeNotFound},
+		BizErrCodeConflict:                {codes.AlreadyExists, GatewayCodeConflict},
+		BizErrCodeCannotBeSelf:            {codes.FailedPrecondition, GatewayCodeBadRequest},
+		BizErrCodeUnsupportedOperation:    {codes.Unimplemented, GatewayCodeInternalServerError},
+		BizErrCodeDatabaseError:           {codes.Internal, GatewayCodeInternalServerError},
+		BizErrCodeDatabaseOperationFailed: {codes.Internal, GatewayCodeInternalServerError},
+		BizErrCodeConversionFailed:        {codes.Internal, GatewayCodeInternalServerError},
+		BizErrCodeExternalServiceError:    {codes.Internal, GatewayCodeInternalServerError},
 	})
 }
 
@@ -77,10 +76,10 @@ func Mapping(bizCode string) CodeMapping {
 	}
 
 	if bizCode == BizErrCodeNotFound || strings.HasSuffix(bizCode, "_not_found") {
-		return CodeMapping{codes.NotFound, gwerrors.ErrCodeNotFound}
+		return CodeMapping{codes.NotFound, GatewayCodeNotFound}
 	}
 
-	return CodeMapping{codes.Internal, gwerrors.ErrCodeInternalServerError}
+	return CodeMapping{codes.Internal, GatewayCodeInternalServerError}
 }
 
 // MapBizCodeToGRPCCode 业务错误码映射为 gRPC 状态码
@@ -88,7 +87,7 @@ func MapBizCodeToGRPCCode(bizCode string) codes.Code {
 	return Mapping(bizCode).GRPC
 }
 
-// MapBizCodeToGatewayErrorCode 业务错误码映射为网关 AppError 错误码
-func MapBizCodeToGatewayErrorCode(bizCode string) gwerrors.ErrorCode {
+// MapBizCodeToGatewayCode 业务错误码映射为网关错误码
+func MapBizCodeToGatewayCode(bizCode string) GatewayCode {
 	return Mapping(bizCode).Gateway
 }

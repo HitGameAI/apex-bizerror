@@ -50,8 +50,13 @@ var builtinMessages = map[string]map[string]string{
 	},
 }
 
-// builtinMessage 查询内置文案：指定语言未收录时回退 en，仍无返回空串
-func builtinMessage(language, errorCode string) string {
+// BuiltinMessage 查询内置文案：指定语言未收录时回退 en，仍无返回空串
+//
+// 导出是为了让 gwx 子模块在网关 locales 未命中时也能取到同一份兜底文案，
+// 避免两边各维护一张表
+// [EN] Exported so the gwx submodule can reach the same fallback table when the
+// gateway's locales miss a key, instead of keeping a second copy
+func BuiltinMessage(language, errorCode string) string {
 	if language == "" {
 		language = "en"
 	}
