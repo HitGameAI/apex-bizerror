@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	github.com/kamalyes/go-i18n v0.3.0 // indirect
+	github.com/kamalyes/go-i18n v0.3.1 // indirect
 	github.com/kamalyes/go-toolbox v0.18.1 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/sys v0.47.0 // indirect

@@ -4,7 +4,7 @@ go 1.25.1
 
 require (
 	github.com/kamalyes/go-bizerror v0.2.0
-	github.com/kamalyes/go-i18n v0.3.0
+	github.com/kamalyes/go-i18n v0.3.1
 	github.com/kamalyes/go-rpc-gateway v1.9.6
 	github.com/stretchr/testify v1.12.1
 )

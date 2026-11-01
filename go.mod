@@ -3,7 +3,7 @@ module github.com/kamalyes/go-bizerror
 go 1.25.1
 
 require (
-	github.com/kamalyes/go-i18n v0.3.0
+	github.com/kamalyes/go-i18n v0.3.1
 	github.com/stretchr/testify v1.12.1
 	google.golang.org/grpc v1.83.0
 )
