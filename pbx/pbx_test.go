@@ -15,7 +15,7 @@ import (
 	"context"
 	"testing"
 
-	bizerror "github.com/kamalyes/go-bizerror"
+	bizerror "github.com/HitGameAI/apex-bizerror"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"

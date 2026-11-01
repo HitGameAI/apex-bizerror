@@ -25,9 +25,9 @@ package gwx
 import (
 	"context"
 
-	bizerror "github.com/kamalyes/go-bizerror"
-	i18n "github.com/kamalyes/go-i18n"
-	gwerrors "github.com/kamalyes/go-rpc-gateway/errors"
+	bizerror "github.com/HitGameAI/apex-bizerror"
+	i18n "github.com/HitGameAI/apex-toolbox/pkg/i18n"
+	gwerrors "github.com/HitGameAI/apex-rpc-gateway/errors"
 )
 
 // NewBizAppError 将业务错误码转换为网关 AppError

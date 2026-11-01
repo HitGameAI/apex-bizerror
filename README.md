@@ -13,11 +13,11 @@
 主模块原先直接引用网关的 `middleware` 与 `errors` 两个包，而 `middleware` 一路连到 `cpool`，再连到 ClickHouse 与 AWS S3 SDK——407 行代码拖进 **686 个外部包**
 拆成三个模块后，只做 gRPC 错误转换的服务只需 **41 个**（grpc 自身闭包，产生 `status.Error` 必需）
 
-[![稳定版本](https://img.shields.io/badge/版本-稳定-green.svg)](https://github.com/kamalyes/go-bizerror)
-[![许可协议](https://img.shields.io/github/license/kamalyes/go-bizerror)](LICENSE)
-[![最新版本](https://img.shields.io/github/v/release/kamalyes/go-bizerror)](https://github.com/kamalyes/go-bizerror/releases)
-[![提交记录](https://img.shields.io/github/last-commit/kamalyes/go-bizerror)](https://github.com/kamalyes/go-bizerror/commits/master)
-[![Go 版本](https://img.shields.io/github/go-mod/go-version/kamalyes/go-bizerror)](https://golang.org/)
+[![稳定版本](https://img.shields.io/badge/版本-稳定-green.svg)](https://github.com/HitGameAI/apex-bizerror)
+[![许可协议](https://img.shields.io/github/license/HitGameAI/apex-bizerror)](LICENSE)
+[![最新版本](https://img.shields.io/github/v/release/HitGameAI/apex-bizerror)](https://github.com/HitGameAI/apex-bizerror/releases)
+[![提交记录](https://img.shields.io/github/last-commit/HitGameAI/apex-bizerror)](https://github.com/HitGameAI/apex-bizerror/commits/master)
+[![Go 版本](https://img.shields.io/github/go-mod/go-version/HitGameAI/apex-bizerror)](https://golang.org/)
 
 ## 错误码约定
 
@@ -56,15 +56,15 @@
 ## 安装
 
 ```bash
-go get github.com/kamalyes/go-bizerror
+go get github.com/HitGameAI/apex-bizerror
 ```
 
 本地联调时可以在业务项目 `go.mod` 里使用本地 replace：
 
 ```go
-require github.com/kamalyes/go-bizerror v0.0.0
+require github.com/HitGameAI/apex-bizerror v0.0.0
 
-replace github.com/kamalyes/go-bizerror => ../go-bizerror
+replace github.com/HitGameAI/apex-bizerror => ../go-bizerror
 ```
 
 ## 快速开始
@@ -77,8 +77,8 @@ package bootstrap
 import (
  "google.golang.org/grpc/codes"
 
- bizerror "github.com/kamalyes/go-bizerror"
- gwerrors "github.com/kamalyes/go-rpc-gateway/errors"
+ bizerror "github.com/HitGameAI/apex-bizerror"
+ gwerrors "github.com/HitGameAI/apex-rpc-gateway/errors"
 )
 
 func registerBizErrors() {
@@ -109,7 +109,7 @@ func (s *ServiceImpl) GetFoo(ctx context.Context, req *pb.GetFooRequest) (*pb.Ge
 Model-PB 泛型转换，在 `pbx` 子模块（转换失败统一返回 `error.conversion_failed`，需先在 go-pbmo 注册转换器）：
 
 ```go
-import "github.com/kamalyes/go-bizerror/pbx"
+import "github.com/HitGameAI/apex-bizerror/pbx"
 
 // 读路径：Model -> PB
 item, err := pbx.ToPB[models.FooModel, pb.FooInfo](ctx, stored)
@@ -141,7 +141,7 @@ return bizerror.ToGRPCErrorWithTemplate(ctx, "error.quota_exceeded", map[string]
 非 gRPC 场景转换为网关 `AppError`，在 `gwx` 子模块：
 
 ```go
-import "github.com/kamalyes/go-bizerror/gwx"
+import "github.com/HitGameAI/apex-bizerror/gwx"
 
 appErr := gwx.NewBizAppError(ctx, "error.conflict")
 appErr := gwx.NewBizAppErrorWithCause(ctx, "error.database_error", err) // 注入 {reason}

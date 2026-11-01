@@ -15,7 +15,7 @@ import (
 	"context"
 	"errors"
 
-	i18n "github.com/kamalyes/go-i18n"
+	i18n "github.com/HitGameAI/apex-toolbox/pkg/i18n"
 )
 
 // Error 标准业务错误（i18n 解析后的 Code + Message）

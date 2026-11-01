@@ -33,8 +33,8 @@ package pbx
 import (
 	"context"
 
-	bizerror "github.com/kamalyes/go-bizerror"
-	"github.com/kamalyes/go-pbmo"
+	bizerror "github.com/HitGameAI/apex-bizerror"
+	"github.com/HitGameAI/apex-toolbox/pkg/pbmo"
 )
 
 // ==================== Model -> PB（读路径） ====================

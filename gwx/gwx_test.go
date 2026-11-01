@@ -16,8 +16,8 @@ import (
 	"errors"
 	"testing"
 
-	bizerror "github.com/kamalyes/go-bizerror"
-	gwerrors "github.com/kamalyes/go-rpc-gateway/errors"
+	bizerror "github.com/HitGameAI/apex-bizerror"
+	gwerrors "github.com/HitGameAI/apex-rpc-gateway/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
